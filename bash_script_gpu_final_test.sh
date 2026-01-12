@@ -1,13 +1,13 @@
 #!/bin/bash
 #SBATCH --job-name=my_gpu_final_test_job
-#SBATCH --output=kmer_V1r_kernels_1_threads_1024_%j.out
-#SBATCH --error=kmer_V1r_kernels_1_threads_1024_%j.err
+#SBATCH --output=%j.out
+#SBATCH --error=%j.err
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
 #SBATCH --gres=gpu:tesla:1
 #SBATCH --ntasks=1
-#SBATCH --time=00:05:00
+#SBATCH --time=00:15:00
 #SBATCH --mem=20GB
 #SBATCH --ntasks-per-node=1
 

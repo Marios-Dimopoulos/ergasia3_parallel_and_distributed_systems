@@ -5,7 +5,7 @@
 
 #include "coloringCC_gpu.h"
 
-#define THREADS_PER_BLOCK 1024 // Define number of threads per block. Can be tuned for better performance.
+#define THREADS_PER_BLOCK 256 // Define number of threads per block. Can be tuned for better performance.
 #define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
 inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true) {  // macro for error checking CUDA calls.
   if (code != cudaSuccess) {
@@ -36,7 +36,7 @@ __global__ void kernel_1(int nrows, int *rowptr, int *index, int *labels, int *d
   }
 }
 
-/*__global__ void kernel_2(int nrows, int *labels, int *d_changed) {  // Second kernel (pointer jumping) of the algorithm. Imrpoves a lot the convergence speed.
+__global__ void kernel_2(int nrows, int *labels, int *d_changed) {  // Second kernel (pointer jumping) of the algorithm. Imrpoves a lot the convergence speed.
   int idx = blockIdx.x*blockDim.x + threadIdx.x;
   if (idx < nrows) {
     int my_label = labels[idx];
@@ -48,7 +48,7 @@ __global__ void kernel_1(int nrows, int *rowptr, int *index, int *labels, int *d
       }
     }
   }
-}*/
+}
 
 void coloringCC_gpu(int nrows, int nnz, const int *rowptr, const int *index, int *labels) {
   int *d_labels = NULL, *d_changed = NULL, *d_rowptr = NULL, *d_index = NULL;
