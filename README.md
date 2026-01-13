@@ -1,29 +1,39 @@
-This project implements the coloringCC labels algorithm using large sparse 
-matrices. The input matrices are provided from Sutisparse collection repository,
-in .mat format and are read using the matio library. The code was developed and 
-evaluated on the Aristotle HPC cluster using Slurm.
+# ColoringCC CUDA Implementation
 
-DEPENDENCIES: Required software: NVCC, matio library, matio dependencies (zlib, HDF5)
+This project implements the parallel Connected Components labeling algorithm using CUDA for large sparse matrices.
 
-DEPENDENCY INSTALLATION NOTE (IMPORTANT): On the Aristotle cluster, the matio library
-and its dependencies were not available system-wide. Therefore, the following libraries
-were installed by me: $HOME/local/zlib
-		      $HOME/local/hdf5
-		      $HOME/local/matio.
+## 🛠 Dependencies
+* **NVCC** (CUDA Toolkit)
+* **matio** library (installed locally)
+* **zlib** & **HDF5** (matio dependencies)
+
+> **DEPENDENCY INSTALLATION NOTE (IMPORTANT):**
+  On the Aristotle cluster, the matio library and its dependencies were not available system-wide:
+  Therefore, the following libraries were installed locally by me:
+    $HOME/local/zlib
+    $HOME/local/hdf5
+    $HOME/local/matio
 The code will not run unless these libraries are available and properly linked
 
-For building the executable: make executable
+## How to Run
+1. **Build:** `make executable`
+2. **Setup:** Place your `.mat` files in a `/matrices` directory.
+3. **Configure:** Edit `INPUT_FILE_NAME` in `bash_script_gpu_final_test.sh`
+4. **Submit:** `sbatch bash_script_gpu_final_test.sh`
+5. **Output:** On the .out file
+6. **Errors:** on the .err file
 
-This will compile "main_gpu.cu" and "coloringCC_gpu.cu" into the executable
+**An example of how the output should look like:**
+>rm -f executable
+>nvcc -03 -gencode arch=compute_60,code=sm_60 -gencode arch=compute_70,code=sm_70 -gencode arch=compute_80,code=sm_80 -gencode arch=compute_75,code=sm_75  -I/home/d/dimopoul/local/matio/include -I/home/d/dimopoul/local/hdf5/include -I/home/d/dimopoul/local/zlib/include -o executable main_gpu.cu coloringCC_gpu.cu -L/home/d/dimopoul/local/matio/lib -L/home/d/dimopoul/local/hdf5/lib -L/home/d/dimopoul/local/zlib/lib -lhdf5 -lz -lmatio
+>job ID: 2242165
+>Running on node: cn22
+>CPUs per taks: 1
+>Copying /home/d/dimopoul/ergasia3_parallhla/matrices/europe_osm.mat to /scratch/d/dimopoul/2242165/europe_osm.mat
+>Staging complete. Starting execution...
+>Number of while iteration: 5324
+>Cleaning up...
+>Removed /scratch/d/dimopoul/2242165
 
-Note: The Makefile assumes the matio library and its dependencies (HDF5, zlib)
-are installed locally in $HOME/local. In the bash script i set the path needed.
-
-Next up, in the commmand line type: sbatch bash_script_gpu_final_test.sh",
-or whatever other slurm command for running a job, and everything happens
-automatically. The .out and .err files are created. On the .out file is 
-printed the output and on the .err file, the errors, if any happened to
-appear. On The bash script, change the INPUT_FILE_NAME according to the 
-file that you want the code to run on. Also, the example matrix, must be 
-installed on a "matrices" directory because of the paths that i've set on 
-the bash script. You can modify that script the way you like
+	
+	
