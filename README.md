@@ -2,7 +2,7 @@
 
 This project implements the parallel Connected Components labeling algorithm using CUDA for large sparse matrices.
 
-## 🛠 Dependencies
+## Dependencies
 * **NVCC** (CUDA Toolkit)
 * **matio** library (installed locally)
 * **zlib** & **HDF5** (matio dependencies)
