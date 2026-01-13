@@ -128,13 +128,6 @@ int main(int argc, char* argv[]) {
     double elapsed = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec)/1e6;
     printf("Execution time: %f seconds\n", elapsed);
 
-    /*printf("Labels Vector:\n");
-    for (int i=0; i<nrows; i++){
-        if (labels[i] != 0) {
-            printf("wrong ");
-        }
-    }*/
-
     free(index);free(rowptr);
     free(labels);
 }

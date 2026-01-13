@@ -14,27 +14,26 @@ inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=t
   }
 }
 
-__global__ void kernel_1(int nrows, int *rowptr, int *index, int *labels, int *d_changed) { // First kernel of the algorithn. Each thread processses a vertex.
+__global__ void kernel_1(int nrows, int *rowptr, int *index, int *labels, int *d_changed) {
   int idx = blockIdx.x*blockDim.x + threadIdx.x;
   if (idx < nrows) {
     int my_label = labels[idx];
+    if (my_label == 0) return;
     int start = rowptr[idx];
     int end = rowptr[idx+1];
     for (int i=start; i<end; i++) {
       int u = index[i];
       int lu = labels[u];
       if (lu < my_label) {
-        int old_val = atomicMin(&labels[idx], lu);
-        if (lu < old_val) {
-          if (*d_changed == 0) { 
-            *d_changed = 1;         
-          }
-          my_label = lu;
-        }
+        atomicExch(&labels[idx], lu);
+        if (*d_changed == 0) *d_changed = 1; 
+        my_label = lu;
+        if (my_label == 0) break; 
       }
     }
   }
 }
+
 
 __global__ void kernel_2(int nrows, int *labels, int *d_changed) {  // Second kernel (pointer jumping) of the algorithm. Imrpoves a lot the convergence speed.
   int idx = blockIdx.x*blockDim.x + threadIdx.x;
@@ -88,5 +87,3 @@ void coloringCC_gpu(int nrows, int nnz, const int *rowptr, const int *index, int
 }
 
 
-// In the report i should mention that some graphs like mawi (which might be correlated with the small number of CC) the while loop does only a few (8) while iterations,
-// but other gpaphs like road_central need hundreds of iterations (700+). This is probably due to the structure of the graph and the number of CCs. SHOULD DEFINITELY MENTION IT!!

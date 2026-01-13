@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=my_gpu_final_test_job
-#SBATCH --output=%j.out
-#SBATCH --error=%j.err
+#SBATCH --output=Job_%j.out
+#SBATCH --error=Job_%j.err
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
@@ -19,7 +19,7 @@ make clean && make executable
 
 export LD_LIBRARY_PATH=$HOME/local/matio/lib:$HOME/local/hdf5/lib:$HOME/local/zlib/lib:$LD_LIBRARY_PATH
 
-INPUT_FILE_NAME="kmer_V1r.mat"  #<---- <---- <---- <---- Really important. Change this according to the matrix you want to test. The matric must be stored in the "matrices folder.""
+INPUT_FILE_NAME="europe_osm.mat"  #<---- <---- <---- <---- Really important. Change this according to the matrix you want to test. The matrix must be stored in the "matrices folder.""
 SOURCE_FILE="$HOME/ergasia3_parallhla/matrices/$INPUT_FILE_NAME"
 JOB_WORKING_DIR="/scratch/d/dimopoul/$SLURM_JOB_ID"
 
