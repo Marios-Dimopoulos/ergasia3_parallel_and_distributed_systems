@@ -14,7 +14,7 @@ inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=t
   }
 }
 
-__global__ void kernel_1(int nrows, int *rowptr, int *index, int *labels, int *d_changed) {
+__global__ void kernel_1(int nrows, int *rowptr, int *index, int *labels, int *changed) {
   int warp_id = (blockIdx.x*blockDim.x + threadIdx.x) / 32;
   int thread_id = threadIdx.x % 32;
   if (warp_id<nrows) {
@@ -40,21 +40,21 @@ __global__ void kernel_1(int nrows, int *rowptr, int *index, int *labels, int *d
     if (thread_id == 0) {
       if (min_found < my_label) {
         atomicExch(&labels[warp_id], min_found);
-        if (*d_changed == 0) *d_changed = 1;
+        if (*changed == 0) *changed = 1;
       }
     }
   }
 }
 
-__global__ void kernel_2(int nrows, int *labels, int *d_changed) {  // Second kernel (pointer jumping) of the algorithm. Imrpoves a lot the convergence speed.
+__global__ void kernel_2(int nrows, int *labels, int *changed) {  // Second kernel (pointer jumping) of the algorithm. Imrpoves a lot the convergence speed.
   int idx = blockIdx.x*blockDim.x + threadIdx.x;
   if (idx < nrows) {
     int my_label = labels[idx];
     int new_label = labels[my_label];
     if (new_label < my_label) {
       labels[idx] = new_label;
-      if (*d_changed == 0) {
-        *d_changed = 1;         
+      if (*changed == 0) {
+        *changed = 1;         
       }
     }
   }

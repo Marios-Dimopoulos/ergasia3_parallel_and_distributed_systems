@@ -14,7 +14,7 @@ inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=t
   }
 }
 
-__global__ void kernel_1(int nrows, int *rowptr, int *index, int *labels, int *d_changed) {
+__global__ void kernel_1(int nrows, int *rowptr, int *index, int *labels, int *changed) {
   int idx = blockIdx.x*blockDim.x + threadIdx.x;
   if (idx < nrows) {
     int my_label = labels[idx];
@@ -27,7 +27,7 @@ __global__ void kernel_1(int nrows, int *rowptr, int *index, int *labels, int *d
       int lu = labels[u];
       if (lu < my_label) {
         atomicExch(&labels[idx], lu);
-        if (*d_changed == 0) *d_changed = 1; 
+        if (*changed == 0) *changed = 1; 
         my_label = lu;
         if (my_label == 0) break; 
       }
@@ -36,15 +36,15 @@ __global__ void kernel_1(int nrows, int *rowptr, int *index, int *labels, int *d
 }
 
 
-__global__ void kernel_2(int nrows, int *labels, int *d_changed) {  // Second kernel (pointer jumping) of the algorithm. Imrpoves a lot the convergence speed.
+__global__ void kernel_2(int nrows, int *labels, int *changed) {  // Second kernel (pointer jumping) of the algorithm. Imrpoves a lot the convergence speed.
   int idx = blockIdx.x*blockDim.x + threadIdx.x;
   if (idx < nrows) {
     int my_label = labels[idx];
     int new_label = labels[my_label];
     if (new_label < my_label) {
       labels[idx] = new_label;
-      if (*d_changed == 0) {
-        *d_changed = 1;         
+      if (*changed == 0) {
+        *changed = 1;         
       }
     }
   }
@@ -73,13 +73,13 @@ void coloringCC_gpu_1(int nrows, int nnz, const int *rowptr, const int *index, i
     h_changed = 0;
     gpuErrchk(cudaMemset(d_changed, 0, sizeof(int)));
 
-    kernel_1<<<blocksPerGrid, THREADS_PER_BLOCK>>>(nrows, d_rowptr, d_index, d_labels, d_changed);
+    kernel_1<<<blocksPerGrid, THREADS_PER_BLOCK>>>(nrows, d_rowptr, d_index, d_labels,d_changed);
     gpuErrchk(cudaGetLastError());
 
-    kernel_2<<<blocksPerGrid, THREADS_PER_BLOCK>>>(nrows, d_labels, d_changed); // Through experiments, calling the kernel_2 only once per while iteration seems to be the best choice.
+    kernel_2<<<blocksPerGrid, THREADS_PER_BLOCK>>>(nrows, d_labels,d_changed); // Through experiments, calling the kernel_2 only once per while iteration seems to be the best choice.
     gpuErrchk(cudaGetLastError());
 
-    gpuErrchk(cudaMemcpy(&h_changed, d_changed, sizeof(int), cudaMemcpyDeviceToHost));
+    gpuErrchk(cudaMemcpy(&h_changed,d_changed, sizeof(int), cudaMemcpyDeviceToHost));
   }
   printf("Number of while iteration: %d\n", counter_of_while_iterations); 
   gpuErrchk(cudaMemcpy(labels, d_labels, sizeof(int)*nrows, cudaMemcpyDeviceToHost)); // Copy back the labels vector from device to host.
