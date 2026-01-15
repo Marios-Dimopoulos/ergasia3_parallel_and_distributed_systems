@@ -10,13 +10,18 @@ MATIO_BASE = $(HOME)/local
 MATIO_INCLUDES = -I$(MATIO_BASE)/matio/include -I$(MATIO_BASE)/hdf5/include -I$(MATIO_BASE)/zlib/include
 MATIO_LIBS = -L$(MATIO_BASE)/matio/lib -L$(MATIO_BASE)/hdf5/lib -L$(MATIO_BASE)/zlib/lib -lhdf5 -lz -lmatio
 
-EXECUTABLE = executable
+EXECUTABLE_1 = executable_1
+EXECUTABLE_2 = executable_2
 
-all: $(EXECUTABLE)
+all: $(EXECUTABLE_1) ${EXECUTABLE_2}
 
-$(EXECUTABLE): main_gpu.cu coloringCC_gpu.cu
+$(EXECUTABLE_1): main_gpu_1.cu coloringCC_gpu_1.cu
+	$(NVCC) $(NVCCFLAGS) $(MATIO_INCLUDES) -o $@ $^ $(MATIO_LIBS)
+
+$(EXECUTABLE_2): main_gpu_2.cu coloringCC_gpu_2.cu
 	$(NVCC) $(NVCCFLAGS) $(MATIO_INCLUDES) -o $@ $^ $(MATIO_LIBS)
 
 
 clean: 
-	rm -f $(EXECUTABLE)
+	rm -f $(EXECUTABLE_1)
+	rm -f $(EXECUTABLE_2)

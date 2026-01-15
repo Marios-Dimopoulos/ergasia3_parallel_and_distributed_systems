@@ -1,0 +1,13 @@
+rm -f executable_1
+rm -f executable_2
+nvcc -O3 -gencode arch=compute_60,code=sm_60 -gencode arch=compute_70,code=sm_70 -gencode arch=compute_80,code=sm_80 -gencode arch=compute_75,code=sm_75  -I/home/d/dimopoul/local/matio/include -I/home/d/dimopoul/local/hdf5/include -I/home/d/dimopoul/local/zlib/include -o executable_1 main_gpu_1.cu coloringCC_gpu_1.cu -L/home/d/dimopoul/local/matio/lib -L/home/d/dimopoul/local/hdf5/lib -L/home/d/dimopoul/local/zlib/lib -lhdf5 -lz -lmatio
+job ID: 2242955
+Running on node: cn21
+Number of tasks: 1
+CPUs per task: 1
+Copying /home/d/dimopoul/ergasia3_parallhla/matrices/europe_osm.mat to /scratch/d/dimopoul/2242955/europe_osm.mat
+Staging complete. Starting execution...
+Number of while iteration: 5813
+Execution time: 25.610192 seconds
+Cleaning up...
+Removed /scratch/d/dimopoul/2242955
