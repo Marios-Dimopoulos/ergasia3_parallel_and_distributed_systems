@@ -14,6 +14,14 @@ inline void memAssert(void *ptr, const char *file, int line, bool abort=true) { 
     }                                                                           
 }
 
+int compare_labels(const void *a, const void *b) {
+    int arg1 = *(const int*)a;
+    int arg2 = *(const int*)b;
+    if (arg1 < arg2) return -1;
+    if (arg1 > arg2) return 1;
+    return 0;
+}
+
 int main(int argc, char* argv[]) {
 
     struct timeval start;
@@ -127,6 +135,26 @@ int main(int argc, char* argv[]) {
 
     double elapsed = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec)/1e6;
     printf("Execution time: %f seconds\n", elapsed);
+    
+    
+    printf("\nStarting validation on CPU...\n");
+    qsort(labels, nrows, sizeof(int), compare_labels);
+    int unique_components = 0;
+    if (nrows > 0) {
+        unique_components = 1;
+        for (int i = 1; i < nrows; i++) {
+            if (labels[i] != labels[i - 1]) {
+            unique_components++;
+            }
+        }
+    }
+
+    printf("==========================================\n");
+    printf("       CC VALIDATION RESULTS\n");
+    printf("==========================================\n");
+    printf(" Total Nodes processed  : %d\n", nrows);
+    printf(" Connected Components   : %d\n", unique_components);
+    printf("==========================================\n");
 
     free(index);free(rowptr);
     free(labels);
