@@ -15,7 +15,7 @@ inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=t
 }
 
 __global__ void kernel_1(int nrows, int *rowptr, int *index, int *labels, int *changed) {
-  int idx = blockIdx.x*blockDim.x + threadIdx.x;
+  int idx = (long long)blockIdx.x*(long long)blockDim.x + (long long)threadIdx.x;
   if (idx < nrows) {
     int my_label = labels[idx];
     if (my_label == 0) return;

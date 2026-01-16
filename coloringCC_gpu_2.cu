@@ -15,7 +15,7 @@ inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=t
 }
 
 __global__ void kernel_1(int nrows, int *rowptr, int *index, int *labels, int *changed) {
-  int warp_id = (blockIdx.x*blockDim.x + threadIdx.x) / 32;
+  int warp_id = ((long long)blockIdx.x* (long long)blockDim.x + (long long )threadIdx.x) / 32;
   int thread_id = threadIdx.x % 32;
   if (warp_id<nrows) {
     int my_label = labels[warp_id];
