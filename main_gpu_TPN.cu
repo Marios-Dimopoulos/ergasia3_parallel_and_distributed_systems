@@ -4,7 +4,7 @@
 #include <matio.h>
 #include <cuda_runtime.h>
 
-#include "coloringCC_gpu_1.h"
+#include "coloringCC_gpu_TPN.h"
 
 #define memErrchk(ptr) { memAssert((ptr), __FILE__, __LINE__); }
 inline void memAssert(void *ptr, const char *file, int line, bool abort=true) { // Macro for error checking memory allocations. Makes the code more readable and easier to debug.
@@ -14,7 +14,7 @@ inline void memAssert(void *ptr, const char *file, int line, bool abort=true) { 
     }                                                                           
 }
 
-int compare_labels(const void *a, const void *b) {
+int compare_labels(const void *a, const void *b) {  // I use this function qsort function, to get a more efficient validation of the results.
     int arg1 = *(const int*)a;
     int arg2 = *(const int*)b;
     if (arg1 < arg2) return -1;
@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
     struct timeval start;
     struct timeval end;
 
-// ========== Read MAT File and Extract Sparse Matrix ==========               
+// ========== Read MAT File and Extract Sparse Matrix ==========
     if (argc < 2) {
         printf("Usage: %s <mat_file>\n", argv[0]);
         return 1;
@@ -130,13 +130,12 @@ int main(int argc, char* argv[]) {
     }
 
     gettimeofday(&start, NULL);
-    coloringCC_gpu_1(nrows, nnz, rowptr, index, labels);  // Call to coloringCC_gpu function. The elapsed time that is measured includes only the execution time of this function.
+    coloringCC_gpu_TPN(nrows, nnz, rowptr, index, labels);  // Call to coloringCC_gpu function. The elapsed time that is measured includes only the execution time of this function.
     gettimeofday(&end, NULL);
 
     double elapsed = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec)/1e6;
     printf("Execution time: %f seconds\n", elapsed);
-    
-    
+// ========== Validation of results ==========
     printf("\nStarting validation on CPU...\n");
     qsort(labels, nrows, sizeof(int), compare_labels);
     int unique_components = 0;
@@ -155,7 +154,7 @@ int main(int argc, char* argv[]) {
     printf(" Total Nodes processed  : %d\n", nrows);
     printf(" Connected Components   : %d\n", unique_components);
     printf("==========================================\n");
-
+// ===========================================
     free(index);free(rowptr);
     free(labels);
 }

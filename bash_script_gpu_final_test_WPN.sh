@@ -15,11 +15,11 @@ module purge
 module load gcc/13.2.0-iqpfkya  # Load the necessary modules
 module load cuda/12.4.0-zk32gam
 
-make clean && make executable_1
+make clean && make executable_WPN
 
 export LD_LIBRARY_PATH=$HOME/local/matio/lib:$HOME/local/hdf5/lib:$HOME/local/zlib/lib:$LD_LIBRARY_PATH
 
-INPUT_FILE_NAME="mawi_201512020330.mat"  #<---- <---- <---- <---- Really important. Change this according to the matrix you want to test. The matrix must be stored in the "matrices folder.""
+INPUT_FILE_NAME="mawi_201512020330.mat"  #<---- <---- <---- <----***Really important. Change this according to the matrix you want to test. The matrix must be stored in the "matrices" folder.***
 SOURCE_FILE="$HOME/ergasia3_parallhla/matrices/$INPUT_FILE_NAME"
 JOB_WORKING_DIR="/scratch/d/dimopoul/$SLURM_JOB_ID"
 
@@ -48,10 +48,10 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-/usr/bin/cp ./executable_1 "$JOB_WORKING_DIR/executable_1"
+/usr/bin/cp ./executable_WPN "$JOB_WORKING_DIR/executable_WPN"
 
 echo "Staging complete. Starting execution..."
 
 cd "$JOB_WORKING_DIR"
 
-./executable_1 "$JOB_WORKING_DIR/$INPUT_FILE_NAME"
+./executable_WPN "$JOB_WORKING_DIR/$INPUT_FILE_NAME"

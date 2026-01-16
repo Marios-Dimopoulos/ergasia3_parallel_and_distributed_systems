@@ -10,18 +10,18 @@ MATIO_BASE = $(HOME)/local
 MATIO_INCLUDES = -I$(MATIO_BASE)/matio/include -I$(MATIO_BASE)/hdf5/include -I$(MATIO_BASE)/zlib/include
 MATIO_LIBS = -L$(MATIO_BASE)/matio/lib -L$(MATIO_BASE)/hdf5/lib -L$(MATIO_BASE)/zlib/lib -lhdf5 -lz -lmatio
 
-EXECUTABLE_1 = executable_1
-EXECUTABLE_2 = executable_2
+EXECUTABLE_TPN = executable_TPN
+EXECUTABLE_WPN = executable_WPN
 
-all: $(EXECUTABLE_1) ${EXECUTABLE_2}
+all: $(EXECUTABLE_TPN) ${EXECUTABLE_WPN}
 
-$(EXECUTABLE_1): main_gpu_1.cu coloringCC_gpu_1.cu
+$(EXECUTABLE_TPN): main_gpu_TPN.cu coloringCC_gpu_TPN.cu
 	$(NVCC) $(NVCCFLAGS) $(MATIO_INCLUDES) -o $@ $^ $(MATIO_LIBS)
 
-$(EXECUTABLE_2): main_gpu_2.cu coloringCC_gpu_2.cu
+$(EXECUTABLE_WPN): main_gpu_WPN.cu coloringCC_gpu_WPN.cu
 	$(NVCC) $(NVCCFLAGS) $(MATIO_INCLUDES) -o $@ $^ $(MATIO_LIBS)
 
 
 clean: 
-	rm -f $(EXECUTABLE_1)
-	rm -f $(EXECUTABLE_2)
+	rm -f $(EXECUTABLE_TPN)
+	rm -f $(EXECUTABLE_WPN)
