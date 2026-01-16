@@ -22,8 +22,8 @@ The code will not run unless these libraries are available and properly linked
 5. **Errors:** on the .err file
 > *MORE DETAILS:*
   (Supposing that the matio library and dependencies were downloaded on the right folder and in the right way) \
-  If you run the program on a HPC cluster, and if you have created the matrices file,
-  downloaded the gparh in there and changed the 'INPUT_FILE_NAME'
+  If you run the program on a HPC cluster, and if you have created the "matrices" directory,
+  downloaded the graph in there and changed the 'INPUT_FILE_NAME'
   in the 'bash_script_gpu_final_test....sh, all you need to do is to:
   sbatch bash_script_gpu_final_test_TPN.sh OR sbatch bash_script_gpu_final_test_WPN.sh,
   and everything will happend automatically. There will be a job_(the id of the job).out
@@ -33,11 +33,11 @@ The code will not run unless these libraries are available and properly linked
 
 ## What i recommend for running the code:
 I recommend running the program on the google colab, because it's the easiest way.
-You don't need to set the matio libray and its dependencies manually. At the very top cell you just
+You don't need to set the matio library and its dependencies manually. At the very top cell you just
 type the commands: `!apt-get update \ !apt-get install -y libmatio-dev`,
-and everything about the matio  library is set. Then you'll need to download the graph using wget... so here there is no need for 
-creating the "matrices" directory. On the next cell, at the very start of it you type  
-`%%writefile program.cu` and below you copy the code of main_gpu_TPN.cu and coloringCC_gpu_TPN.cu OR main_gpu_WPN.cu and coloringCC_gpu_WPN.cu. 
+and everything about the matio  library is set. Then you'll need to download the graph using wget... so there is no need for 
+creating the "matrices" directory. On the next cell, at the very start of it you type: `%%writefile program.c`
+and below you copy the code of main_gpu_TPN.cu and coloringCC_gpu_TPN.cu OR main_gpu_WPN.cu and coloringCC_gpu_WPN.cu. 
 At the last cell, you just type:`!nvcc -O3 -arch=sm_70 program.cu -lmatio program` and at the end you type:
 `!./program (the name of the graph)` and it's done. below there is an example of how the colab version should look like.
 
