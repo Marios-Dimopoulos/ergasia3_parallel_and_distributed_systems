@@ -15,16 +15,16 @@ inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=t
 }
 
 __global__ void kernel_1(int nrows, int *rowptr, int *index, int *labels, int *changed) {
-  int warp_id = ((long long)blockIdx.x* (long long)blockDim.x + (long long )threadIdx.x) / 32;
-  int thread_id = threadIdx.x % 32;
-  if (warp_id<nrows) {
-    int my_label = labels[warp_id];
+  int warp_idx = ((long long)blockIdx.x* (long long)blockDim.x + (long long )threadIdx.x) / 32;
+  int thread_idx = threadIdx.x % 32;
+  if (warp_idx<nrows) {
+    int my_label = labels[warp_idx];
     if (my_label == 0) return;
 
-    int start = rowptr[warp_id];
-    int end = rowptr[warp_id+1];
+    int start = rowptr[warp_idx];
+    int end = rowptr[warp_idx+1];
     int min_found = my_label;
-    for (int i=start+thread_id; i<end; i+=32) {
+    for (int i=start+thread_idx; i<end; i+=32) {
       int u = index[i];
       int lu = labels[u];
       if (lu < min_found) {
@@ -37,9 +37,9 @@ __global__ void kernel_1(int nrows, int *rowptr, int *index, int *labels, int *c
       if (other_lu < min_found) min_found = other_lu;
     }
 
-    if (thread_id == 0) {
+    if (thread_idx == 0) {
       if (min_found < my_label) {
-        atomicExch(&labels[warp_id], min_found);
+        atomicExch(&labels[warp_idx], min_found);
         if (*changed == 0) *changed = 1;
       }
     }
