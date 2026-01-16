@@ -42,7 +42,7 @@ At the last cell, you just type:`!nvcc -O3 -arch=sm_70 program.cu -lmatio progra
 
 ```
 !apt-get update
-!aptpget install -y libmatio-dev
+!apt-get install -y libmatio-dev
 
 !wget https://suitesparse-collection-website.herokuapp.com/mat/MAWI/mawi_201512020330.mat
 
