@@ -306,7 +306,7 @@ int main(int argc, char* argv[]) {
 
 !nvcc -O3 -arch=sm_70 program.cu -lmatio -o program
 
-!./program mawi_201512020330.mats
+!./program mawi_201512020330.mat
 ```
 
 **An example of how the output should look like:**
