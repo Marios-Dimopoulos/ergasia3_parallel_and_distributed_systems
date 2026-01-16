@@ -30,17 +30,15 @@ The code will not run unless these libraries are available and properly linked
   and there will two executables: executable_TPN, and executable_WPN. You will just need to
   type on the terminal: ./executable_... (the graph that you want).mat, and you are ready to go.
 
-  I recommend running the program on the google colab, because it's the easiest way.
-  You don't need to set the matio libray and its dependencies manually. At the very top cell you just
-  type the commands: `!apt-get update \ !apt-get install -y libmatio-dev`, and everything about the matio
-  library is set. Then you'll need to download the graph using wget... so here there is no need for 
-  creating the "matrices" directory. On the next cell, at the very start of it you type
-  `%%writefile program.cu` and below you copy the code of main_gpu_TPN.cu and coloringCC_gpu_TPN.cu
-  or main_gpu_WPN.cu and coloringCC_gpu_WPN.cu. At the last cell, you just type:
-  `!nvcc -O3 -arch=sm_70 program.cu -lmatio program` and at the end you type:
-  `!./program (the name of the graph)` and it's done. On the github repository there will be a 
-  file called: colab_code, and there will be an example of how the colab version should be.
-  
+## What i recommend for running the code:
+I recommend running the program on the google colab, because it's the easiest way.
+You don't need to set the matio libray and its dependencies manually. At the very top cell you just
+type the commands: `!apt-get update \ !apt-get install -y libmatio-dev`, and everything about the matio  library is set. Then you'll need to download the graph using wget... so here there is no need for 
+creating the "matrices" directory. On the next cell, at the very start of it you type  `%%writefile program.cu` and below you copy the code of main_gpu_TPN.cu and coloringCC_gpu_TPN.cu OR main_gpu_WPN.cu and coloringCC_gpu_WPN.cu. At the last cell, you just type:
+`!nvcc -O3 -arch=sm_70 program.cu -lmatio program` and at the end you type:
+`!./program (the name of the graph)` and it's done. On the github repository there will be a 
+file called: colab_code, and there will be an example of how the colab version should be.
+
 **An example of how the output should look like:**
 ```bash
 rm -f executable
