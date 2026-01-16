@@ -15,15 +15,16 @@ This project implements the parallel Connected Components labeling algorithm usi
 The code will not run unless these libraries are available and properly linked
 
 ## How to Run
-1. **Build:** `make all` 
-2. **Setup:** Place your `.mat` files in a `/matrices` directory.
-3. **Configure:** Edit `INPUT_FILE_NAME` in `bash_script_gpu_final_test....sh`
-4. **Submit:** `sbatch bash_script_gpu_final_test....sh`
-5. **Output:** On the .out file
-6. **Errors:** on the .err file
-> *IMPORTANT:*
-  (Supposing that the matio library and dependencies were downloaded on the right foler and in the right way) \
-  If you run the program on a HPC cluster, all you need to do is to:
+1. **Setup:** Place your `.mat` files in a `/matrices` directory.
+2. **Configure:** Edit `INPUT_FILE_NAME` in `bash_script_gpu_final_test....sh`
+3. **Submit:** `sbatch bash_script_gpu_final_test....sh`
+4. **Output:** On the .out file
+5. **Errors:** on the .err file
+> *MORE DETAILS:*
+  (Supposing that the matio library and dependencies were downloaded on the right folder and in the right way) \
+  If you run the program on a HPC cluster, and if you have created the matrices file,
+  downloaded the gparh in there and changed the 'INPUT_FILE_NAME'
+  in the 'bash_script_gpu_final_test....sh, all you need to do is to:
   sbatch bash_script_gpu_final_test_TPN.sh OR sbatch bash_script_gpu_final_test_WPN.sh,
   and everything will happend automatically. There will be a job_(the id of the job).out
   and job_(the id of the job).err. If you dont work on the aristotle HPC cluster, run: make all,
