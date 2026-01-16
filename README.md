@@ -309,7 +309,9 @@ int main(int argc, char* argv[]) {
 !./program mawi_201512020330.mat
 ```
 
-**An example of how the output should look like:**
+
+
+**An example of how the output should look like (Running on the aristotle HPC cluster):**
 ```bash
 rm -f executable
 nvcc -03 -gencode arch=compute_60,code=sm_60 -gencode arch=compute_70,code=sm_70 -gencode arch=compute_80,code=sm_80 -gencode arch=compute_75,code=sm_75  -I/home/d/dimopoul/local/matio/include -I/home/d/dimopoul/local/hdf5/include -I/home/d/dimopoul/local/zlib/include -o executable main_gpu.cu coloringCC_gpu.cu -L/home/d/dimopoul/local/matio/lib -L/home/d/dimopoul/local/hdf5/lib -L/home/d/dimopoul/local/zlib/lib -lhdf5 -lz -lmatio
@@ -330,4 +332,18 @@ Starting validation on CPU...
 ==========================================
 Cleaning up...
 Removed /scratch/d/dimopoul/2243435
+```
+**An example of how the output should look like (Running on the google colab):**
+```bash
+Number of while iteration: 8
+Execution time: 2.800037 seconds
+
+Starting validation on CPU...
+==========================================
+       CC VALIDATION RESULTS
+==========================================
+ Total Nodes processed  : 226196185
+ Connected Components   : 3971144
+==========================================
+```
 	
