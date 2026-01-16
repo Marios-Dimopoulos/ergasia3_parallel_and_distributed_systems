@@ -1,1 +1,4 @@
-matrices/
+# In this directory were all the graphs that i used for the creating of the plots and the validation of my algorithm.
+# I mention it on the README.md file too, but just to be clear, in order for my code to run you need to store the graphs that you are working with, on this directory.
+# (I have hard-coded the paths on the bash script)
+matrices/ 
