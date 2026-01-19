@@ -28,7 +28,8 @@ The code will not run unless these libraries are available and properly linked
   sbatch bash_script_gpu_final_test_TPN.sh OR sbatch bash_script_gpu_final_test_WPN.sh,
   and everything will happend automatically. There will be a job_(the id of the job).out
   and job_(the id of the job).err. If you dont work on the aristotle HPC cluster, run: make all,
-  and there will two executables: executable_TPN, and executable_WPN. You will just need to
+  and there will two executables: executable_TPN, and executable_WPN. You will just need to:
+  export LD_LIBRARY_PATH=$HOME/local/matio/lib:$HOME/local/hdf5/lib:$HOME/local/zlib/lib:$LD_LIBRARY_PATH,
   type on the terminal: ./executable_... (the graph that you want).mat, and you are ready to go.
 
 ## What i recommend for running the code:
